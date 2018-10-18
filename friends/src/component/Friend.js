@@ -1,0 +1,53 @@
+import React from 'react';
+import EditFriendForm from './EditFriendForm';
+import axios from 'axios';
+
+class Friend extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showEditForm: false,
+      editedFriend: '',
+    }
+  }
+
+  toggleForm = () => {
+    this.setState({ showEditForm: !this.state.showEditForm})
+  }
+
+  editHandler = event => {
+    this.setState({ editedFriend: event.target.value})
+  }
+
+  saveEditFriend = () => {
+    const newFriend = { newFriend: this.state.editedFriend }
+    axios
+      .put('http://localhost:5000/friends/${this.props.friend.id}', newFriend)
+      .then(response => {
+        console.log("POST RESPONSE:", response)
+        this.setState({ friendsData: response.data})
+      })
+      .catch(error => console.log(error))
+  }
+
+
+  render() {
+    return (
+      <div>
+        {this.props.friend.name}
+        {this.state.showEditForm ? (
+          <EditFriendForm 
+            submitEdits={this.saveEditFriend}
+            friend={this.props.friend} 
+            editHandler={this.editFriendHandler}
+          />
+        ) : null}
+        <button onClick={this.toggleForm}>Edit Friend</button>
+      </div>
+    )
+  }
+}
+
+export default Friend;
+
+// editHandler={() => console.log("Add editHandler")}
