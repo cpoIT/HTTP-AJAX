@@ -14,10 +14,28 @@ class App extends Component {
   }
 
   componentDidMount () {
-    axios.get('http://localhost:5000/friends').then(response => {
+    axios.get('http://localhost:5000/friends')
+    .then(response => {
       console.log(response);
       this.setState({ friendsData: response.data})
+    })
+    .catch(err => {
+      console.log(err)
     });
+  };
+
+  handleNameChange = event => {
+    this.setState({ friend: event.target.value })
+  }
+
+  handleAddFriend = () => {
+    const friend = {friend: this.state.friend}
+    axios.post('http://localhost:5000/friends', friend )
+      .then(response => {
+        console.log(response)
+        this.setState({ friendsData: response.data})
+      })
+      .catch(error => console.log(error))
   }
 
   render() {
@@ -25,6 +43,14 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>Lambda Friends</h1>
+          <input 
+            type='text' 
+            placeholder="new friend's name" 
+            onChange={this.handleNameChange}
+            name="friend"
+            value={this.state.friend}
+            />
+            <button onClick={this.handleAddFriend}>Add Friend</button>
           <FriendsList friends={this.state.friendsData} />
         </header>
       </div>
