@@ -8,6 +8,7 @@ class Friend extends React.Component {
     this.state = {
       showEditForm: false,
       editedFriend: '',
+
     }
   }
 
@@ -19,13 +20,29 @@ class Friend extends React.Component {
     this.setState({ editedFriend: event.target.value})
   }
 
-  saveEditFriend = () => {
+  // setData = data => {
+  //   this.setState({ friend: data })
+  // }
+
+  saveEditFriend = (props) => {
+    console.log(props)
     const newFriend = { newFriend: this.state.editedFriend }
     axios
-      .put('http://localhost:5000/friends/${this.props.friend.id}', newFriend)
+      .put(`http://localhost:5000/friends/${this.props.friend.id}`, newFriend)
       .then(response => {
-        console.log("POST RESPONSE:", response)
+        console.log("PUT RESPONSE:", response)
         this.setState({ friendsData: response.data})
+      })
+      .catch(error => console.log(error))
+  }
+
+  handleDelete = id => {
+    console.log(id)
+    axios
+      .delete(`http://localhost:5000/friends/${id}`)
+      .then(response => {
+        console.log("DELETE RESPONSE:", response)
+        this.setState({ friendsData: response.data })
       })
       .catch(error => console.log(error))
   }
@@ -43,6 +60,7 @@ class Friend extends React.Component {
           />
         ) : null}
         <button onClick={this.toggleForm}>Edit Friend</button>
+        <button onClick={this.handleDelete.id}>Delete Friend</button>
       </div>
     )
   }

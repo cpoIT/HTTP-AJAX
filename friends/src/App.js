@@ -25,7 +25,7 @@ class App extends Component {
     });
   };
 
-  handleSetData = data => this.setState({friendsData: data})
+  handleSetData = data => this.setState({ friendsData: data })
 
   handleNameChange = event => {
     this.setState({ friend: event.target.value })
@@ -41,6 +41,8 @@ class App extends Component {
       })
       .catch(error => console.log(error))
   }
+
+
 
   render() {
     return (
